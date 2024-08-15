@@ -1,6 +1,7 @@
 ﻿using HPlusSport.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace HPlusSport.API.Controllers
 {
@@ -33,6 +34,14 @@ namespace HPlusSport.API.Controllers
                 products = products
                     .Where(
                     p => p.Price <= queryParameters.MinPrice);
+            }
+
+            if(!string.IsNullOrEmpty(queryParameters.SearchTerm))
+            {
+                products = products.Where(
+                    p => p.Sku.ToLower().Contains(queryParameters.SearchTerm.ToLower()) ||
+                        p.Name.ToLower().Contains(queryParameters.SearchTerm.ToLower())
+                    );
             }
 
             if (!string.IsNullOrEmpty(queryParameters.Sku))
